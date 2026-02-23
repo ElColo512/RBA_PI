@@ -1,0 +1,30 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.RazorPages
+@model RegisterSuccess
+@{
+    ViewData["Title"] = "Registro exitoso";
+    Layout = "/Views/Shared/_LayoutEmpty.cshtml";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h4 class="mb-3 text-success">Registro exitoso</h4>
+
+                    <p>
+                        Tu usuario fue creado correctamente.
+                    </p>
+
+                    <p>
+                        Para continuar, debés contactar con el administrador del sistema
+                        para que habilite tu acceso.
+                    </p>
+
+                    <a asp-page="/Account/Login" class="btn btn-primary mt-3">Volver al login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

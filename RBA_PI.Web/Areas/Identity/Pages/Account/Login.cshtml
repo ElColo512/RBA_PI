@@ -1,0 +1,47 @@
+﻿@page
+@model LoginModel
+
+@{
+    Layout = "/Views/Shared/_LayoutEmpty.cshtml";
+    ViewData["Title"] = "Log in";
+}
+
+<img src="~/images/log_rba_login.png" class="login-logo" />
+<img src="~/images/login_bg.jpg" class="login-bg" />
+
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-sm login-card">
+        <div class="card-body p-4">
+            <h4 class="text-center mb-4 text-white">Ingreso al sistema</h4>
+
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Email" class="form-control" placeholder="Email" />
+                    <label asp-for="Input.Email">Email</label>
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Password" class="form-control" type="password" placeholder="Contraseña" />
+                    <label asp-for="Input.Password">Contraseña</label>
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">Ingresar</button>
+                </div>
+            </form>
+
+            <div class="text-center mt-3">
+                <p>
+                    <a id="forgot-password" asp-page="./ForgotPassword">¿Olvidaste tu contraseña?</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
