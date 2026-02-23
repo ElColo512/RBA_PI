@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="RBA_PI.Application/RBA_PI.Application.csproj" />
+  <Project Path="RBA_PI.Domain/RBA_PI.Domain.csproj" />
+  <Project Path="RBA_PI.Infrastructure/RBA_PI.Infrastructure.csproj" />
+  <Project Path="RBA_PI.Web/RBA_PI.Web.csproj" />
+  <Project Path="RBA_PI/RBA_PI.csproj" />
+</Solution>
