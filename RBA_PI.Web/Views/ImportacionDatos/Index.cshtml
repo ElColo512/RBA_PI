@@ -1,0 +1,66 @@
+﻿@model ImportacionExcelViewModel
+@{
+    var returnUrl = Context.Session.GetString("Importacion_ReturnUrl");
+}
+
+<div class="container py-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0"><i class="bi bi-filetype-xls me-2"></i> Importación de Archivo Excel desde ARCA</h5>
+
+            <a href="@(returnUrl ?? Url.Action("Index", "Home"))" class="btn btn-sm btn-secondary">
+                <i class="bi bi-arrow-left"></i> Volver
+            </a>
+        </div>
+
+        <div class="card-body">
+            <p class="text-muted">
+                Este proceso lee un archivo Excel bajado desde ARCA con los comprobantes de tipo Factura que su empresa ha recibido.
+                Para descargar los datos, ingrese al sitio web de ARCA, en el servicio “Mis Comprobantes” y luego seleccione el periodo deseado.
+                Al visualizar los datos descárguelos usando la opción “Excel” y obtenga el archivo a importar.
+            </p>
+
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger">
+                    @TempData["Error"]
+                </div>
+            }
+
+            @if (TempData["Ok"] != null)
+            {
+                <div class="alert alert-success">
+                    @TempData["Ok"]
+                </div>
+            }
+
+            <form asp-action="Procesar" method="post" enctype="multipart/form-data" onsubmit="mostrarOverlay()">
+                <div class="mb-3">
+                    <input asp-for="Archivo" type="file" class="form-control" />
+                </div>
+
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-success">
+                        Procesar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="overlay" class="overlay d-none">
+    <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+        <span class="visually-hidden">Cargando...</span>
+    </div>
+    <div class="fw-bold mt-3">Procesando...</div>
+</div>
+
+@section Scripts {
+    <script>
+        function mostrarOverlay() {
+            document.getElementById('overlay')
+                .classList.remove('d-none');
+        }
+    </script>
+}

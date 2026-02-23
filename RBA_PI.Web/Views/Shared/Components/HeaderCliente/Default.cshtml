@@ -1,0 +1,36 @@
+﻿@model HeaderClienteViewModel
+
+@if (Model.IsAuthenticated)
+{
+    <div class="collapse navbar-collapse justify-content-between w-100">
+        <div class="d-flex flex-column">
+            @if (Model.Cliente != null)
+            {
+                <span class="navbar-brand mb-0 h5 cursor-default">
+                    @Model.Cliente.RazonSocial
+                </span>
+            }
+            <span class="navbar-brand mb-0 h6 cursor-default">
+                Portal de Integración con Tango
+            </span>
+        </div>
+
+        <div class="d-flex flex-column align-items-end">
+            <span class="navbar-text text-white mb-1 cursor-default">
+                @Model.Usuario!.NombreCompleto
+            </span>
+
+            <ul class="navbar-nav flex-row">
+                <li class="nav-item me-2">
+                    <a asp-area="Identity" asp-page="/Account/Manage/ChangePassword" asp-route-returnUrl="@Context.Request.Path" class="nav-link text-white">
+                        <i class="bi bi-pencil-square me-2"></i> Modificar Contraseña
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <partial name="_LoginPartial" />
+                </li>
+            </ul>
+        </div>
+    </div>
+}

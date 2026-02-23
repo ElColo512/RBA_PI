@@ -1,0 +1,60 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    var nombreCompleto = ViewBag.nombreCompleto;
+}
+
+<div class="container py-5">
+    <h3 class="mb-4">Bienvenido/a @nombreCompleto</h3>
+
+    <h4 class="mb-4">Seleccione el origen de datos donde se encuentran sus facturas de Compras:</h4>
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
+        <div class="col d-flex">
+            <a asp-controller="FacturasConceptos" asp-action="index" class="card zoom-hover text-center text-decoration-none flex-fill h-100 transform transition hover-scale-105 hover-shadow-lg">
+                <div class="card-body d-flex flex-column justify-content-center">
+                    <i class="bi bi-file-earmark-excel display-4 mb-3 text-primary"></i>
+                    <h5 class="card-title text-dark">Arca</h5>
+                </div>
+            </a>
+        </div>
+
+        <div class="col d-flex">
+            <a asp-controller=""
+               asp-action=""
+               class="card cursor-default text-center text-decoration-none flex-fill h-100
+                      transform transition hover-scale-105 hover-shadow-lg">
+
+                <div class="card-body d-flex flex-column justify-content-center">
+                    <i class="bi bi-file-earmark-excel display-4 mb-3 text-success"></i>
+                    <h5 class="card-title text-dark">Plantilla Excel</h5>
+                </div>
+            </a>
+        </div>
+
+        <div class="col d-flex">
+            <a asp-controller=""
+               asp-action=""
+               class="card cursor-default text-center text-decoration-none flex-fill h-100
+                      transform transition hover-scale-105 hover-shadow-lg">
+
+                <div class="card-body d-flex flex-column justify-content-center">
+                    <i class="bi bi-file-earmark-excel display-4 mb-3 text-warning"></i>
+                    <h5 class="card-title text-dark">Cobranzas.com</h5>
+                </div>
+            </a>
+        </div>
+
+        <div class="col d-flex">
+            <a asp-controller=""
+               asp-action=""
+               class="card cursor-default text-center text-decoration-none flex-fill h-100
+                      transform transition hover-scale-105 hover-shadow-lg">
+
+                <div class="card-body d-flex flex-column justify-content-center">
+                    <i class="bi bi-file-earmark-excel display-4 mb-3 text-danger"></i>
+                    <h5 class="card-title text-dark">Otros orígenes de datos</h5>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>

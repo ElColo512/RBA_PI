@@ -1,0 +1,29 @@
+﻿@model ComprobanteHeaderViewModel
+<input type="hidden" name="Header.IdComprobante" value="@Model.IdComprobante" />
+<input type="hidden" name="Header.Cuit" value="@Model.Cuit" />
+<input type="hidden" name="Header.Proveedor" value="@Model.Proveedor" />
+<input type="hidden" name="Header.Cae" value="@Model.Cae" />
+<input type="hidden" name="Header.Comprobante" value="@Model.Comprobante" />
+<input type="hidden" name="Header.FechaEmision" value="@Model.FechaEmision" />
+
+<div class="border rounded-4 p-4 mb-4">
+    <h5 class="fw-bold mb-3">Datos de la factura</h5>
+
+    <div class="row">
+        <div class="col-md-6">
+            <p><strong>Proveedor:</strong> @Model.Proveedor</p>
+            <p><strong>CUIT:</strong> @Model.Cuit</p>
+            <p><strong>Razón Social:</strong> @Model.RazonSocial</p>
+        </div>
+
+        <div class="col-md-6">
+            <p><strong>Comprobante:</strong> @Model.Comprobante</p>
+            <p><strong>Fecha:</strong> @Model.FechaEmision.ToString("dd/MM/yyyy")</p>
+
+            <div class="mb-2 d-flex align-items-center gap-2">
+                <label class="fw-bold mb-0">Fecha contable:</label>
+                <input  type="date" name="Header.FechaContable" value="@Model.FechaContable.ToString("yyyy-MM-dd")" class="form-control form-control-sm w-auto" />
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,36 @@
+﻿@model ComprobanteTotalesViewModel
+<input type="hidden" name="Totales.ImporteGravado" value="@Model.ImporteGravado" />
+<input type="hidden" name="Totales.ImporteNoGravado" value="@Model.ImporteNoGravado" />
+<input type="hidden" name="Totales.ImporteExento" value="@Model.ImporteExento" />
+<input type="hidden" name="Totales.ImporteTotal" value="@Model.ImporteTotal" />
+
+<div class="border rounded-4 p-4 mb-4">
+    <div class="row mb-2 align-items-center">
+        <div class="col-2">
+            <label asp-for="ImporteGravado" class="col-form-label fw-semibold">Importe Gravado:</label>
+        </div>
+        <div class="col-2">
+            <input asp-for="ImporteGravado" class="form-control text-end" disabled />
+        </div>
+
+        <div class="col-2 text-end">
+            <label asp-for="ImporteNoGravado" class="col-form-label fw-semibold">No Gravado:</label>
+        </div>
+        <div class="col-2">
+            <input asp-for="ImporteNoGravado" class="form-control text-end" disabled />
+        </div>
+
+        <div class="col-2 text-end">
+            <label asp-for="ImporteExento" class="col-form-label fw-semibold">Exento:</label>
+        </div>
+        <div class="col-2">
+            <input asp-for="ImporteExento" class="form-control text-end" disabled />
+        </div>
+    </div>
+    <div class="row">
+        <div class="offset-8 col-2 fw-semibold text-end">Importe Total:</div>
+        <div class="col-2">
+            <input value="@Model.ImporteTotal" class="form-control text-end fw-bold" disabled />
+        </div>
+    </div>
+</div>

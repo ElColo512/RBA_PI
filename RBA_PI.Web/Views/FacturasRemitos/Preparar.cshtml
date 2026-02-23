@@ -1,0 +1,249 @@
+﻿@model FacturaRemitoPrepararViewModel
+
+<div class="container py-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class="bi bi-database-add me-2"></i> Procesar Datos en Tango</h5>
+            <a asp-controller="FacturasRemitos" asp-action="Index" class="btn btn-sm btn-secondary"><i class="bi bi-arrow-left"></i> Volver</a>
+        </div>
+
+        <div class="card-body">
+            <form asp-action="Procesar" id="procesarForm" method="post">
+                <partial name="Comprobantes/_ComprobanteHeader" model="Model.Header" />
+
+                <div class="border rounded-4 p-4 mb-4">
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-2 fw-semibold">Sector:</div>
+                        <div class="col-4">
+                            <select asp-for="SectorId" asp-items="Model.Sectores" class="form-select select2"></select>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-2 fw-semibold">Depositos:</div>
+                        <div class="col-4">
+                            <select asp-for="DepositoId" asp-items="Model.Depositos" class="form-select select2"></select>
+                        </div>
+                        @if (Model.UsaAuxiliar)
+                        {
+                            <div class="col-2 fw-semibold text-end">Auxiliar:</div>
+                            <div class="col-4">
+                                <select asp-for="AuxiliarId" asp-items="Model.Auxiliares" class="form-select select2"></select>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="row align-items-center">
+                        <div class="col-2 fw-semibold">Observaciones:</div>
+                        <div class="col-6">
+                            <input asp-for="Observaciones" class="form-control" maxlength="30" />
+                        </div>
+                    </div>
+                </div>
+
+                <partial name="Comprobantes/_ComprobanteImpuestos" model="Model.Impuestos" />
+                <partial name="Comprobantes/_ComprobanteOtrosTributos" model="Model.OtrosTributos" />
+                <partial name="Comprobantes/_ComprobanteTotales" model="Model.Totales" />
+
+                <div class="container border rounded-4 p-4 mb-4 shadow-sm">
+                    <div class="table-responsive mb-3 border rounded-4">
+                        <table class="table table-bordered table-striped text-center align-middle">
+                            <thead>
+                                <tr>
+                                    <th style="width: 10%">Cod. Artículo</th>
+                                    <th style="width: 50%">Descripción</th>
+                                    <th style="width: 10%">Cantidad</th>
+                                    <th style="width: 10%">Precio</th>
+                                    <th style="width: 13%">Total</th>
+                                    <th style="width: 7%">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="itemsBody">
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="4"></td>
+                                    <td class="fw-bold text-success">
+                                        <span id="totalGeneral">0,00</span>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-6">
+                            <select id="articuloSelect"
+                                    class="form-select select2">
+                                <!-- Primer item duplicado SOLO para mostrar -->
+                                <option value="_INIT_" selected>@Model.Articulos.First().Text</option>
+
+                                @foreach (var item in Model.Articulos)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-end">
+                    <button type="submit" class="btn btn-success">Procesar</button>
+                    <a asp-controller="FacturasConceptos" asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let itemIndex = 0;
+        $(function () {
+            const $articulos = $('#articuloSelect');
+            $articulos.select2({
+                width: '100%',
+                placeholder: 'Seleccione un artículo...',
+                allowClear: false
+            });
+
+            // seleccionar artículo => agregar fila
+            $articulos.on('select2:select', function (e) {
+                const data = e.params.data;
+
+                // Ignorar el item "fake"
+                if (data.id === '_INIT_') return;
+                agregarFila(data.id, data.text);
+
+                // Volver a mostrar el primero fake
+                $articulos.val('_INIT_').trigger('change.select2');
+            });
+        });
+
+        function agregarFila(id, texto) {
+            if (articuloYaAgregado(id)) {
+                showToast("Este articulo ya está en la lista.", "warning");
+                return;
+            }
+
+            const tbody = document.getElementById("itemsBody");
+            const index = tbody.children.length;
+            const tr = document.createElement("tr");
+            tr.dataset.index = index;
+            // Código
+            const tdCodigo = document.createElement("td");
+            tdCodigo.textContent = id;
+
+            // input hidden ArticuloId (CLAVE)
+            const inputArticuloId = document.createElement("input");
+            inputArticuloId.type = "hidden";
+            inputArticuloId.name = `Items[${index}].ArticuloId`;
+            inputArticuloId.value = id;
+            tdCodigo.appendChild(inputArticuloId);
+
+            // Descripción
+            const tdDesc = document.createElement("td");
+            tdDesc.textContent = texto;
+            tdDesc.classList.add("text-start");
+
+            // Cantidad
+            const tdCantidad = document.createElement("td");
+            const inputCantidad = document.createElement("input");
+            inputCantidad.inputMode = "numeric";
+            inputCantidad.pattern = "[0-9]*";
+            inputCantidad.step = "1";
+            inputCantidad.value = "1";
+            inputCantidad.className = "form-control js-integer text-end";
+            inputCantidad.name = `Items[${index}].Cantidad`;
+            inputCantidad.onchange = () => recalcularFila(index);
+            tdCantidad.appendChild(inputCantidad);
+
+            // Precio
+            const tdPrecio = document.createElement("td");
+            const inputPrecio = document.createElement("input");
+            inputPrecio.inputMode = "decimal";
+            inputPrecio.placeholder = "0,00";
+            inputPrecio.step = "0.01";
+            inputPrecio.value = "";
+            inputPrecio.className = "form-control js-numeric text-end";
+            inputPrecio.name = `Items[${index}].Precio`;
+            inputPrecio.onchange = () => recalcularFila(index);
+            tdPrecio.appendChild(inputPrecio);
+
+            // Total
+            const tdTotal = document.createElement("td");
+            tdTotal.id = `totalFila-${index}`;
+            tdTotal.textContent = "0,00";
+            tdTotal.classList.add("fw-semibold");
+
+            // Acción
+            const tdAccion = document.createElement("td");
+            const btnEliminar = document.createElement("button");
+            btnEliminar.type = "button";
+            btnEliminar.textContent = "Eliminar";
+            btnEliminar.className = "btn btn-sm btn-danger";
+            btnEliminar.onclick = () => eliminarFila(index);
+            tdAccion.appendChild(btnEliminar);
+
+            tr.append(tdCodigo, tdDesc, tdCantidad, tdPrecio, tdTotal, tdAccion);
+            tbody.appendChild(tr);
+            initIntegerInputs(tr);
+            if(window.initNumericInputs)
+            {
+                window.initNumericInputs(tr);
+            }
+        }
+
+        function recalcularFila(index) {
+            const fila = document.querySelector(`tr[data-index='${index}']`);
+            if (!fila) return;
+
+            const inputCantidad = fila.querySelector("input[name*='Cantidad']");
+            const inputPrecio = fila.querySelector("input[name*='Precio']");
+            const cantidad = parseInt(inputCantidad.value) || 0;
+            const precio = getPrecioReal(inputPrecio);
+            const total = cantidad * precio;
+
+            document.getElementById(`totalFila-${index}`).textContent = total.toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            recalcularTotalGeneral();
+        }
+
+        function getPrecioReal(input) {
+            if (input.dataset.raw) {
+                return parseFloat(input.dataset.raw) || 0;
+            }
+
+            // fallback si todavía no hubo blur
+            const raw = input.value.replace(',', '.');
+            const number = Number(raw);
+            return isNaN(number) ? 0 : number;
+        }
+
+
+        function recalcularTotalGeneral() {
+            let total = 0;
+
+            document.querySelectorAll("[id^='totalFila-']").forEach(span => {
+                const valor = span.textContent
+                .replace(/\./g, '')
+                .replace(',', '.');
+                total += parseFloat(valor) || 0;
+            });
+
+            document.getElementById("totalGeneral").textContent = total.toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        }
+
+        function eliminarFila(index) {
+            const fila = document.querySelector(`tr[data-index='${index}']`);
+            if (fila) {
+                fila.remove();
+                recalcularTotalGeneral();
+            }
+        }
+
+        function articuloYaAgregado(codigo) {
+            return Array.from(document.querySelectorAll("tr[data-index]")).some(tr => tr.children[0].textContent.trim() === codigo);
+        }
+    </script>
+}

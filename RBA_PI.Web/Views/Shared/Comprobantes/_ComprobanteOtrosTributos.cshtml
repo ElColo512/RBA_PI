@@ -1,0 +1,39 @@
+﻿@model ComprobantesOtrosTributosViewModel
+@{
+    var disabledAttr = Model.PuedeImputarOtrosTributos ? null : "disabled";
+}
+<input type="hidden" name="OtrosTributos.OtrosTributos" value="@Model.OtrosTributos" />
+
+<div class="container border rounded-4 p-4 mb-4 shadow-sm">
+    <div class="row mb-2 align-items-center">
+        <div class="col-2">
+            <label asp-for="OtrosTributos" class="col-form-label fw-semibold">Otros Tributos:</label>
+        </div>
+
+        <div class="col-3">
+            <input asp-for="OtrosTributos" class="form-control text-end" disabled />
+        </div>
+
+        <div class="col-3 ms-auto text-end">
+            <label asp-for="ImputarNoGravado" class="col-form-label fw-semibold">Imputar como concepto no gravado:</label>
+        </div>
+
+        <div class="col-2">
+            <input name="OtrosTributos.ImputarNoGravado" class="form-control text-end js-numeric" inputmode="decimal" autocomplete="off" />
+        </div>
+    </div>
+
+    <div class="d-flex align-items-center flex-nowrap gap-2">
+        <div class="d-flex align-items-center gap-2">
+            <label asp-for="ImputarAId" class="col-form-label fw-semibold mb-0">Imputar a (1º Impuesto):</label>
+            <select name="OtrosTributos.ImputarAId" asp-items="Model.ImputarAOptions" id="imputarASelect" class="form-select js-imputar-select" data-target="imputarValorInput" style="width:250px" disabled="@disabledAttr"></select>
+            <input name="OtrosTributos.ImputarValor" class="form-control text-end js-numeric js-imputar-input" style="width:120px" id="imputarValorInput" inputmode="decimal" autocomplete="off" disabled="@disabledAttr" />
+        </div>
+
+        <div class="d-flex align-items-center gap-2 ms-auto">
+            <label asp-for="ImputarAId2" class="col-form-label fw-semibold mb-0">Imputar a (2º Impuesto):</label>
+            <select name="OtrosTributos.ImputarAId2" asp-items="Model.ImputarAOptions2" id="imputarASelect2" class="form-select js-imputar-select" data-target="imputarValorInput2" style="width:250px" disabled="@disabledAttr"></select>
+            <input name="OtrosTributos.ImputarValor2" class="form-control text-end js-numeric js-imputar-input" style="width:120px" id="imputarValorInput2" inputmode="decimal" autocomplete="off" disabled="@disabledAttr" />
+        </div>
+    </div>
+</div>

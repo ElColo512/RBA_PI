@@ -1,0 +1,62 @@
+﻿@model FacturaConceptoPrepararViewModel
+@{
+    var usaSector = Model.UsaSector ? null : "disabled";
+}
+@if (!Model.UsaAuxiliar)
+{
+    <input type="hidden" name="AuxiliarId" value="@Model.AuxiliarId" />
+    <input type="hidden" name="SectorId" value="@Model.AuxiliarId" />
+}
+
+<div class="container py-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class="bi bi-database-add me-2"></i> Procesar Datos en Tango</h5>
+            <a asp-controller="FacturasConceptos" asp-action="Index" class="btn btn-sm btn-secondary"><i class="bi bi-arrow-left"></i> Volver</a>
+        </div>
+
+        <div class="card-body">
+            <form asp-action="Procesar" id="procesarForm" method="post">
+                <partial name="Comprobantes/_ComprobanteHeader" model="Model.Header" />
+
+                <div class="border rounded-4 p-4 mb-4">
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-2 fw-semibold">Sector:</div>
+                        <div class="col-4">
+                            <select asp-for="SectorId" asp-items="Model.Sectores" class="form-select select2" disabled="@usaSector"></select>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-2 fw-semibold">Concepto:</div>
+                        <div class="col-4">
+                            <select asp-for="ConceptoId" asp-items="Model.Conceptos" class="form-select select2"></select>
+                        </div>
+                        @if (Model.UsaAuxiliar)
+                        {
+                            <div class="col-2 fw-semibold text-end">Auxiliar:</div>
+                            <div class="col-4">
+                                <select asp-for="AuxiliarId" asp-items="Model.Auxiliares" class="form-select select2"></select>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="row align-items-center">
+                        <div class="col-2 fw-semibold">Observaciones:</div>
+                        <div class="col-6">
+                            <input asp-for="Observaciones" class="form-control" maxlength="30" />
+                        </div>
+                    </div>
+                </div>
+
+                <partial name="Comprobantes/_ComprobanteImpuestos" model="Model.Impuestos" />
+                <partial name="Comprobantes/_ComprobanteOtrosTributos" model="Model.OtrosTributos" />
+                <partial name="Comprobantes/_ComprobanteTotales" model="Model.Totales" />
+                <div class="text-end">
+                    <button type="submit" class="btn btn-success">Procesar</button>
+                    <a asp-controller="FacturasConceptos" asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,28 @@
+﻿@model ComprobanteImpuestosViewModel
+@for (var i = 0; i < Model.Items.Count; i++)
+{
+    <input type="hidden" name="Impuestos.Items[@i].Tipo" value="@Model.Items[i].Tipo" />
+    <input type="hidden" name="Impuestos.Items[@i].Neto" value="@Model.Items[i].Neto" />
+    <input type="hidden" name="Impuestos.Items[@i].Iva" value="@Model.Items[i].Iva" />
+}
+
+<div class="border rounded-4 p-4 mb-4">
+    @foreach (var item in Model.Items)
+    {
+        <div class="row mb-2 align-items-center">
+            <div class="col-2">
+                <label class="fw-semibold">@item.LabelNeto</label>
+            </div>
+            <div class="col-4">
+                <input value="@item.Neto" class="form-control text-end" disabled />
+            </div>
+
+            <div class="col-2 text-end">
+                <label class="fw-semibold">@item.LabelIva</label>
+            </div>
+            <div class="col-4">
+                <input value="@item.Iva" class="form-control text-end" disabled />
+            </div>
+        </div>
+    }
+</div>
